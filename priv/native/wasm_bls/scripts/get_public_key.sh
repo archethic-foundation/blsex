@@ -1,0 +1,7 @@
+#!/bin/sh
+
+extism call target/wasm32-unknown-unknown/debug/wasm_bls.wasm getPublicKey --input "B80C035591824036CC214F76B8A8A9A4D1DB1B0BADE6B6964660069D142A600A"
+# 82e790438e433df65dcd9e8d0e7f30f23782a3131924fb05a7b5037a695adf1ad34de35713d454e76a756a6ce787e221
+
+extism call target/wasm32-unknown-unknown/debug/wasm_bls.wasm getPublicKey --input "1D31933538B1CD8918BFF857BDD57AF80472D5B9C984D057FA9D0247FDEF2F08"
+# a3afba533dff8737e3602f1231871ba11224e11df92cb8bcf3cb66e9d311638103f308addb9562cb07bf6221bb0d3d00
