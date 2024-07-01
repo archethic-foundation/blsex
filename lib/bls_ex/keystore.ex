@@ -40,7 +40,7 @@ defmodule BlsEx.Keystore do
     {:ok, %{plugin: plugin, seed_fn: fn -> seed end}}
   end
 
-  defp seed_digest(seed), do: :crypto.hash(:sha256, seed)
+  defp seed_digest(seed), do: :crypto.hash(:sha512, seed)
 
   def handle_call(:get_public_key, _from, state = %{plugin: plugin, seed_fn: seed_fn}) do
     case Extism.Plugin.call(

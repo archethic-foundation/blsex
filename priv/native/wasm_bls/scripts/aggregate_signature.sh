@@ -1,6 +1,6 @@
 #!/bin/sh
 
-extism call target/wasm32-unknown-unknown/debug/wasm_bls.wasm aggregateSignatures  \
+extism call target/wasm32-unknown-unknown/release/wasm_bls.wasm aggregateSignatures  \
 --input "{\"signatures\": [\"ad95489865d4b502f3d0d265541bef07cae685ddffd5b743ace24bf8e110375389e389f1c950acde77268f18d77da34c0f7c05b4ce2de60300641cf77ecde9c3b3a75d811d1f345dd87cb3f9b155f7f8283d8b60b28229a9d5a32343fb96b165\",\"b6df816b4e19c33e1978061a189650e8534f14b79fe30b8f8fd6ce3ba904e5f161a88918c65cdbea239120af752406ae03b35fa8fe77af125464d57aea75b5f00135e813ce8b921785d6368faf3492971432758c5ef81f500876a3de418332dd\"], \"public_keys\": [\"82e790438e433df65dcd9e8d0e7f30f23782a3131924fb05a7b5037a695adf1ad34de35713d454e76a756a6ce787e221\", \"a3afba533dff8737e3602f1231871ba11224e11df92cb8bcf3cb66e9d311638103f308addb9562cb07bf6221bb0d3d00\"]}" \
 --log-level=info
 

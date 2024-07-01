@@ -5,7 +5,6 @@ use crate::request::{
 };
 use crate::signature::Signature;
 use bls12_381::Scalar;
-use dusk_bytes::Error as DuskBytesError;
 
 use extism_pdk::*;
 
@@ -17,7 +16,7 @@ mod signature;
 
 #[plugin_fn]
 pub fn getPublicKey(seed_str: String) -> FnResult<String> {
-    let secret_key = parse_secret_key(seed_str).unwrap();
+    let secret_key = parse_secret_key(seed_str.clone());
     let public_key = secret_key.public_key().to_bytes();
     let public_key_hex = hex::encode(public_key);
     Ok(public_key_hex)
@@ -25,19 +24,16 @@ pub fn getPublicKey(seed_str: String) -> FnResult<String> {
 
 #[plugin_fn]
 pub fn signData(request: SignRequest) -> FnResult<String> {
-    let secret_key = parse_secret_key(request.seed).unwrap();
+    let secret_key = parse_secret_key(request.seed);
     let signature = secret_key.sign(request.data.as_bytes());
     let signature_hex = hex::encode(signature.to_bytes());
     Ok(signature_hex)
 }
 
-fn parse_secret_key(seed: String) -> Result<SecretKey, DuskBytesError> {
+fn parse_secret_key(seed: String) -> SecretKey {
     let bytes = hex::decode(seed).unwrap();
-    let secret_key = match Scalar::from_bytes(&bytes.as_slice().try_into().unwrap()).into() {
-        Some(sk) => sk,
-        None => return Err(DuskBytesError::InvalidData),
-    };
-    Ok(SecretKey(secret_key))
+    let bytes_slice: &[u8; 64] = bytes.as_slice().try_into().unwrap();
+    SecretKey(Scalar::from_bytes_wide(bytes_slice))
 }
 
 #[plugin_fn]
@@ -81,7 +77,7 @@ pub fn aggregateSignatures(request: SignatureAggregateRequest) -> FnResult<Strin
 }
 
 #[plugin_fn]
-pub fn aggregatePublicKey(request: PublicKeyAggregationRequest) -> FnResult<String> {
+pub fn aggregatePublicKeys(request: PublicKeyAggregationRequest) -> FnResult<String> {
     let parsed_public_keys = request
         .public_keys
         .iter()
