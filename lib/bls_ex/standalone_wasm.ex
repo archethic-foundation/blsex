@@ -1,4 +1,5 @@
 defmodule BlsEx.StandaloneWasm do
+  @moduledoc false
   use GenServer
 
   @wasm_path Application.compile_env!(:bls_ex, :wasm_path)

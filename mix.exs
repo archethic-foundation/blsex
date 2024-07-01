@@ -24,7 +24,8 @@ defmodule BlsEx.MixProject do
     [
       {:extism, "~> 1.0"},
       {:jason, "~> 1.4"},
-      {:stream_data, "~> 1.1", only: [:test]}
+      {:stream_data, "~> 1.1", only: [:test]},
+      {:ex_doc, "~> 0.34.1", only: :dev, runtime: false}
     ]
   end
 end

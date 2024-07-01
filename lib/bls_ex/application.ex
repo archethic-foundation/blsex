@@ -1,4 +1,6 @@
 defmodule BlsEx.Application do
+  @moduledoc false
+
   def start(_, _) do
     Supervisor.start_link(
       [

@@ -1,5 +1,5 @@
 defmodule BlsEx.Keystore do
-  @doc """
+  @moduledoc """
   Represents a keystore holding a the wasm instance for the given private key
 
   To use the keystore, you have to instanciate it with `start_link/1` and later use either `sign/2` or `get_public_key/1`
