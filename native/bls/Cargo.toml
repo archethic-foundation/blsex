@@ -1,14 +1,16 @@
 [package]
-name = "wasm_bls"
+name = "bls"
 version = "0.1.0"
+authors = []
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
+name = "bls"
+path = "src/lib.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-extism-pdk = "1.1.0"
+rustler = "0.33.0"
 serde = { version = "1.0.197", features = ["derive"] }
 dusk-bls12_381 = "0.13.0"
 hex = "0.4.3"
