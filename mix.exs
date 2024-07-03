@@ -7,7 +7,24 @@ defmodule BlsEx.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      description: "BLS signature utility for Elixir",
+      deps: deps(),
+      package: package()
+    ]
+  end
+
+  defp package do
+    [
+      files: [
+        "lib",
+        "native/bls/.cargo",
+        "native/bls/src",
+        "native/bls/Cargo*",
+        "checksum-*.exs",
+        "mix.exs"
+      ],
+      licenses: ["AGPL-3.0-or-later"],
+      links: %{"GitHub" => "https://github.com/archethic-foundation/bls_ex"}
     ]
   end
 

@@ -1,11 +1,10 @@
 # BlsEx
 
-**TODO: Add description**
+This package is Elixir utility to work with BLS signature scheme supporting aggregation of signatures and public keys along with signature and verification.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `bls_ex` to your list of dependencies in `mix.exs`:
+Adds `bls_ex` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -15,7 +14,6 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/bls_ex>.
+## Documentation
 
+Documentation is [available on Hexdocs](https://hexdocs.pm/bls_ex)
