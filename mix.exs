@@ -4,7 +4,7 @@ defmodule BlsEx.MixProject do
   def project do
     [
       app: :bls_ex,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       description: "BLS signature utility for Elixir",
@@ -38,8 +38,6 @@ defmodule BlsEx.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:extism, "~> 1.0"},
-      # {:jason, "~> 1.4"},
       {:stream_data, "~> 1.1", only: [:test]},
       {:ex_doc, "~> 0.34.1", only: :dev, runtime: false},
       {:benchee, "~> 1.3", only: :test},

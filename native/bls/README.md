@@ -7,7 +7,7 @@
 ## To load the NIF:
 
 ```elixir
-defmodule Bls do
+defmodule Bls.Native do
   use Rustler, otp_app: :bls_ex, crate: "bls"
 
   # When your NIF is loaded, it will override this function.

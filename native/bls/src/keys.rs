@@ -1,4 +1,4 @@
-use crate::errors::Error;
+use crate::errors::CryptoError;
 use crate::hash::{h0, h1};
 use crate::signature::Signature;
 
@@ -34,22 +34,24 @@ impl PublicKey {
         t.to_compressed()
     }
 
-    pub fn from_bytes(bytes: &[u8]) -> Result<Self, Error> {
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, CryptoError> {
         if bytes.len() != 48 {
-            return Err(Error::InvalidPoint);
+            return Err(CryptoError::InvalidPoint);
         }
         let mut res = [0u8; 48];
         res.as_mut().copy_from_slice(bytes);
-        let affine: G1Affine =
-            Option::from(G1Affine::from_compressed(&res)).ok_or(Error::InvalidPoint)?;
-        Ok(Self(affine.into()))
+
+        match Option::<G1Affine>::from(G1Affine::from_compressed(&res)) {
+            Some(affine) => Ok(Self(affine.into())),
+            None => Err(CryptoError::InvalidPoint)
+        }
     }
 
     /// Verify a [`Signature`] by comparing the results of the two pairing
     /// operations: e(sig, g_1) == e(Hₒ(m), pk).
-    pub fn verify(&self, sig: &Signature, msg: &[u8]) -> Result<(), Error> {
+    pub fn verify(&self, sig: &Signature, msg: &[u8]) -> Result<(), CryptoError> {
         if !self.is_valid() || !sig.is_valid() {
-            return Err(Error::InvalidPoint);
+            return Err(CryptoError::InvalidPoint);
         }
         let h0m = h0(msg);
 
@@ -59,7 +61,7 @@ impl PublicKey {
         if p1 == p2 {
             Ok(())
         } else {
-            Err(Error::InvalidSignature)
+            Err(CryptoError::InvalidSignature)
         }
     }
 
@@ -68,14 +70,9 @@ impl PublicKey {
         self.0.to_affine().is_torsion_free().into() && self.0.is_on_curve().into() && !is_identity
     }
 
-    pub fn aggregate(pks: &[PublicKey]) -> Result<Self, Error> {
+    pub fn aggregate(pks: &[PublicKey]) -> Result<Self, CryptoError> {
         if pks.is_empty() {
-            return Err(Error::ZeroSizedInput);
-        }
-        let public_keys_iter = pks.iter();
-        let valid_keys = public_keys_iter.fold(true, |acc, next| acc & next.is_valid());
-        if !valid_keys {
-            return Err(Error::InvalidPoint);
+            return Err(CryptoError::ZeroSizedInput);
         }
 
         let sum = pks
