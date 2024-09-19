@@ -144,13 +144,4 @@ pub fn aggregate_public_keys<'a>(env: Env<'a>, public_keys: Term) -> Term<'a> {
     }
 }
 
-rustler::init!(
-    "Elixir.BlsEx.Native",
-    [
-        get_public_key,
-        sign,
-        verify_signature,
-        aggregate_signatures,
-        aggregate_public_keys
-    ]
-);
+rustler::init!("Elixir.BlsEx.Native");
