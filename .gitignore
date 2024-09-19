@@ -26,3 +26,6 @@ bls_ex-*.tar
 /tmp/
 
 .DS_Store
+
+priv/native/*
+target
