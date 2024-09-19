@@ -10,7 +10,8 @@ defmodule BlsEx.Native do
     force_build: System.get_env("BLS_EX_BUILD") in ["1", "true"],
     targets:
       Enum.uniq(["aarch64-unknown-linux-musl" | RustlerPrecompiled.Config.default_targets()]),
-    version: @version
+    version: @version,
+    nif_versions: ~w(2.16)
 
   def get_public_key(_secret_key), do: :erlang.nif_error(:nif_not_loaded)
   def sign(_secret_key, _data), do: :erlang.nif_error(:nif_not_loaded)
