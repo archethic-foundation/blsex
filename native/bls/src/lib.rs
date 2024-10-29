@@ -71,7 +71,6 @@ pub fn verify_signature<'a>(env: Env<'a>, public_key: Binary, message: Binary, s
             }
         },
         Err(e) => {
-            println!("hello there!");
             return (atoms::error(), e.to_atom(env)).encode(env)
         }
     }
