@@ -2,6 +2,7 @@ use crate::keys::{PublicKey, SecretKey};
 use crate::signature::Signature;
 
 use bls12_381::Scalar;
+use rayon::prelude::*;
 
 mod errors;
 mod hash;
@@ -83,29 +84,31 @@ pub fn aggregate_signatures<'a>(env: Env<'a>, signatures: Term, public_keys: Ter
 
     let parsed_signatures = signatures
         .iter()
-        .map(|x| {
-            match Signature::from_bytes(x.as_slice()) {
-                Ok(sig) => Option::Some(sig),
-                Err(_) => Option::None
-            }
+        .map(|x| x.as_slice())
+        .collect::<Vec<&[u8]>>()
+        .par_iter()
+        .map(|x| match Signature::from_bytes(x) {
+            Ok(sig) => Option::Some(sig),
+            Err(_) => Option::None,
         })
         .filter(|o| o.is_some())
         .map(|o| o.unwrap())
         .collect::<Vec<Signature>>();
 
-    let parse_public_keys = public_keys
+    let parsed_public_keys = public_keys
         .iter()
-        .map(|x| {
-            match PublicKey::from_bytes(x.as_slice()) {
-                Ok(sig) => Option::Some(sig),
-                Err(_) => Option::None
-            }
+        .map(|x| x.as_slice())
+        .collect::<Vec<&[u8]>>()
+        .par_iter()
+        .map(|x| match PublicKey::from_bytes(x) {
+            Ok(sig) => Option::Some(sig),
+            Err(_) => Option::None,
         })
         .filter(|o| o.is_some())
         .map(|o| o.unwrap())
         .collect::<Vec<PublicKey>>();
 
-    match Signature::aggregate(parsed_signatures.as_slice(), parse_public_keys.as_slice()) {
+    match Signature::aggregate(parsed_signatures.as_slice(), parsed_public_keys.as_slice()) {
         Ok(aggregated_signature) => {
             let signature_bytes = aggregated_signature.to_bytes();
             let mut bin = OwnedBinary::new(signature_bytes.len()).unwrap();
@@ -119,13 +122,15 @@ pub fn aggregate_signatures<'a>(env: Env<'a>, signatures: Term, public_keys: Ter
 #[rustler::nif]
 pub fn aggregate_public_keys<'a>(env: Env<'a>, public_keys: Term) -> Term<'a> {
     let public_keys: Vec<Binary> = public_keys.decode().unwrap();
+
     let parsed_public_keys = public_keys
         .iter()
-        .map(|x| {
-            match PublicKey::from_bytes(x.as_slice()) {
-                Ok(sig) => Option::Some(sig),
-                Err(_) => Option::None
-            }
+        .map(|x| x.as_slice())
+        .collect::<Vec<&[u8]>>()
+        .par_iter()
+        .map(|x| match PublicKey::from_bytes(x) {
+            Ok(sig) => Option::Some(sig),
+            Err(_) => Option::None,
         })
         .filter(|o| o.is_some())
         .map(|o| o.unwrap())

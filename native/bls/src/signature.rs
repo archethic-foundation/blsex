@@ -2,6 +2,7 @@ use crate::errors::CryptoError;
 use crate::hash::h1;
 use crate::keys::PublicKey;
 use bls12_381::{G2Affine, G2Projective};
+use rayon::prelude::*;
 
 #[derive(Debug)]
 pub struct Signature(pub(crate) G2Affine);
@@ -35,15 +36,15 @@ impl Signature {
         }
 
         let res = sigs
-            .into_iter()
-            .zip(public_keys.iter())
+            .into_par_iter()
+            .zip(public_keys.par_iter())
             .map(|(sig, pk)| {
                 let mut sig2 = Signature(sig.0);
                 let t = h1(pk);
                 sig2.0 = (sig2.0 * t).into();
-                sig2
+                G2Projective::from(sig2.0)
             })
-            .fold(G2Projective::identity(), |acc, signature| acc + signature.0);
+            .reduce(G2Projective::identity, |acc, signature| acc + signature);
 
         Ok(Self(res.into()))
     }
