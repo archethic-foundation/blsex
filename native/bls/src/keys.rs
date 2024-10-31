@@ -5,6 +5,7 @@ use crate::signature::Signature;
 use bls12_381::{G1Affine, G1Projective, Scalar};
 use group::Curve;
 use pairing::PairingCurveAffine;
+use rayon::prelude::*;
 
 pub struct PublicKey(pub(crate) G1Projective);
 pub struct SecretKey(pub(crate) Scalar);
@@ -76,13 +77,13 @@ impl PublicKey {
         }
 
         let sum = pks
-            .into_iter()
+            .into_par_iter()
             .map(|public_key| {
                 let t = h1(&public_key);
                 let gx = public_key.0 * t;
                 G1Projective::from(gx)
             })
-            .fold(G1Projective::default(), |acc, next| acc + next);
+            .reduce(G1Projective::default, |acc, next| acc + next);
 
         let agg_pub = G1Projective::from(sum);
         Ok(Self(agg_pub))

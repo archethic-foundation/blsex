@@ -65,6 +65,7 @@ dependencies = [
  "group",
  "hex",
  "pairing",
+ "rayon",
  "rustler",
  "sha2",
 ]
