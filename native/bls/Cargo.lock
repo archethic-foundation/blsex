@@ -57,7 +57,7 @@ dependencies = [
 
 [[package]]
 name = "bls"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "bls12_381",
  "dusk-bls12_381",
