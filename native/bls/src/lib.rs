@@ -19,7 +19,7 @@ mod atoms {
     }
 }
 
-#[rustler::nif]
+#[rustler::nif(schedule = "DirtyCpu")]
 pub fn get_public_key<'a>(env: Env<'a>, seed: Binary) -> Term<'a> {
     match parse_secret_key(seed.as_slice()) {
         Ok(secret_key) => {
@@ -33,7 +33,7 @@ pub fn get_public_key<'a>(env: Env<'a>, seed: Binary) -> Term<'a> {
     }
 }
 
-#[rustler::nif]
+#[rustler::nif(schedule = "DirtyCpu")]
 fn sign<'a>(env: Env<'a>, seed: Binary, data: Binary) -> Term<'a> {
     match parse_secret_key(seed.as_slice()) {
         Ok(secret_key) => {
@@ -57,7 +57,7 @@ fn parse_secret_key<'a>(seed: &[u8]) -> Result<SecretKey, errors::CryptoError> {
     }
 }
 
-#[rustler::nif]
+#[rustler::nif(schedule = "DirtyCpu")]
 pub fn verify_signature<'a>(env: Env<'a>, public_key: Binary, message: Binary, signature: Binary) -> Term<'a> {
     match PublicKey::from_bytes(public_key.as_slice()) {
         Ok(public_key) => {
@@ -77,7 +77,7 @@ pub fn verify_signature<'a>(env: Env<'a>, public_key: Binary, message: Binary, s
     }
 }
 
-#[rustler::nif]
+#[rustler::nif(schedule = "DirtyCpu")]
 pub fn aggregate_signatures<'a>(env: Env<'a>, signatures: Term, public_keys: Term) -> Term<'a> {
     let signatures: Vec<Binary> = signatures.decode().unwrap();
     let public_keys: Vec<Binary> = public_keys.decode().unwrap();
@@ -119,7 +119,7 @@ pub fn aggregate_signatures<'a>(env: Env<'a>, signatures: Term, public_keys: Ter
     }
 }
 
-#[rustler::nif]
+#[rustler::nif(schedule = "DirtyCpu")]
 pub fn aggregate_public_keys<'a>(env: Env<'a>, public_keys: Term) -> Term<'a> {
     let public_keys: Vec<Binary> = public_keys.decode().unwrap();
 
